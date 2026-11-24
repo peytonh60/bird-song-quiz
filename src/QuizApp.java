@@ -57,15 +57,42 @@ public class QuizApp {
     }
 
     private JPanel buildQuestionPage(int index) {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        String answer = questions[index][1];
 
         return null;
     }
 
     // array of questions where index 0 = audio file path and index 1 = answer
     private String[][] generateQuestions() {
-        return null;
+        List<String> songs = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("answers.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                songs.add(line.split(",")[0]);
+                names.add(line.split(",")[1]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String[][] questions = new String[songs.size()][names.size()];
+        for (int i = 0; i < questions.length; i++) {
+            questions[i][0] = songs.get(i);
+            questions[i][1] = names.get(i);
+        }
+
+        String[][] myRound = new String[n][2];
+        for (int i = 0; i < n; i++) {
+            int index = (int) (Math.random() * questions.length);
+            myRound[i][0] = questions[index][0];
+            myRound[i][1] = questions[index][1];
+        }
+
+        return myRound;
     }
 
 }
