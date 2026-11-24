@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.swing.*;
 
 public class AudioPlayer {
+
+    // player object plays mp3 data from an input stream
     private static Player player;
 
     public static JPanel addAudioBox(String filePath) {

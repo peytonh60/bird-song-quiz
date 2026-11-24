@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.*;
+
 public class QuizApp {
 
     // number of questions
@@ -61,6 +64,12 @@ public class QuizApp {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         String answer = questions[index][1];
+
+        // adds audio box
+        panel.add(AudioPlayer.addAudioBox(questions[index][0]));
+
+        // adds text drop box
+
 
         return null;
     }

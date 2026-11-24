@@ -1,4 +1,4 @@
-import java.swing.*;
+import javax.swing.*;
 
 public class MainGUI {
 
