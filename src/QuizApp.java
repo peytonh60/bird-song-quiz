@@ -1,12 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class QuizApp {
 
     // number of questions
     private static final int n = 5;
+
     // creates a new array to represent questions correct (1 = correct, 0 = incorrect)
     private static final int[] correct = new int[n];
+
+    private String[][] questions;
 
     // Card Layout manages different parges in the game
     private final CardLayout cards = new CardLayout();
@@ -14,7 +20,7 @@ public class QuizApp {
     private final JPanel main = new JPanel(cards);
     private final JLabel resultLabel = new JLabel("- / 5");
 
-    private int totalScore = 0;
+    private int score = 0;
 
     public QuizApp() {
         JFrame frame = new JFrame("Bird Song Quiz");
@@ -27,15 +33,15 @@ public class QuizApp {
         JButton startButton = new JButton("Start Quiz");
         startButton.addActionListener(e -> {
             score = 0;
-            cards.show(main, "start");
+            cards.show(main, "q0");
         });
         startPanel.add(startButton);
 
         // adds start panel to main panel of cards
-        main.add(startPanel, "q0");
+        main.add(startPanel, "start");
 
         // generates 5 questions
-        String[][] questions = generateQuestions();
+        questions = generateQuestions();
 
         // creates one page per question
         for (int i = 0; i < questions.length; i++) {
@@ -69,16 +75,40 @@ public class QuizApp {
         panel.add(AudioPlayer.addAudioBox(questions[index][0]));
 
         // adds text drop box
+        JComboBox<String> answerBox = SearchableComboBox.addAnswerBox();
+        panel.add(answerBox);
 
+        // adds submit button
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(e -> {
+            if (answerBox.getEditor().getEditorComponent().equals(questions[index][1])) {
+                score++;
+                correct[index] = 1;
+            }
+            goToNext(index);
+        });
 
-        return null;
+        panel.add(submitButton);
+
+        return panel;
+    }
+
+    // advances to next card
+    private void goToNext(int index) {
+        int next = index + 1;
+        if (next < questions.length) {
+            cards.show(main, "q" + next);
+        } else {
+            resultLabel.setText(score + " / " + questions.length);
+            cards.show(main, "result");
+        }
     }
 
     // array of questions where index 0 = audio file path and index 1 = answer
     private String[][] generateQuestions() {
         List<String> songs = new ArrayList<>();
         List<String> names = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("answers.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("docs/answers.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 songs.add(line.split(",")[0]);
@@ -88,7 +118,7 @@ public class QuizApp {
             e.printStackTrace();
         }
 
-        String[][] questions = new String[songs.size()][names.size()];
+        String[][] questions = new String[songs.size()][2];
         for (int i = 0; i < questions.length; i++) {
             questions[i][0] = songs.get(i);
             questions[i][1] = names.get(i);

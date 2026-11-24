@@ -1,7 +1,7 @@
 import javazoom.jl.player.Player;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.swing.*;
+import javax.swing.*;
 
 public class AudioPlayer {
 
@@ -30,7 +30,7 @@ public class AudioPlayer {
             }).start();
         });
 
-        panel.add(playButton);
-        return panel;
+        audioBox.add(playButton);
+        return audioBox;
     }
 }
