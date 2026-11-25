@@ -9,9 +9,6 @@ public class QuizApp {
     // number of questions
     private static final int n = 5;
 
-    // creates a new array to represent questions correct (1 = correct, 0 = incorrect)
-    private static final int[] correct = new int[n];
-
     private String[][] questions;
 
     // Card Layout manages different parges in the game
@@ -58,6 +55,9 @@ public class QuizApp {
            cards.show(main, "start");
         });
 
+        resultPanel.add(resultLabel, BorderLayout.CENTER);
+        resultPanel.add(playAgain, BorderLayout.SOUTH);
+
         // adds result panel to card set
         main.add(resultPanel, "result");
 
@@ -71,23 +71,34 @@ public class QuizApp {
 
         String answer = questions[index][1];
 
-        // adds text drop box
-        JComboBox<String> answerBox = SearchableComboBox.addAnswerBox();
-
         // adds correct/incorrect label
         JLabel correctLabel = new JLabel("");
 
+        // adds text drop box
+        JComboBox<String> answerBox = SearchableComboBox.addAnswerBox();
+
         // adds submit button
         JButton submitButton = new JButton("Submit");
+        submitButton.setEnabled(true);
+
         submitButton.addActionListener(e -> {
-            if (answerBox.getEditor().getEditorComponent().equals(answer)) {
+
+            String guess = String.valueOf(answerBox.getEditor().getItem()).trim();
+
+            if (guess.equalsIgnoreCase(answer.trim())) {
                 score++;
-                correct[index] = 1;
                 correctLabel.setText("Correct!");
             } else {
                 correctLabel.setText("Incorrect. Answer is " + answer);
             }
-            goToNext(index);
+
+            // pauses submit button to show feedback
+            submitButton.setEnabled(false);
+
+            // uses swing timer to wait for feedback
+            Timer timer = new Timer(1500, ev -> goToNext(index));
+            timer.setRepeats(false);
+            timer.start();
         });
 
         // adds questions
@@ -99,13 +110,9 @@ public class QuizApp {
         responsePanel.add(answerBox);
         responsePanel.add(submitButton);
 
-        // creates bottom panel for label
-        JPanel resultPanel = new JPanel();
-        resultPanel.add(correctLabel);
-
         panel.add(responsePanel, BorderLayout.CENTER);
 
-        panel.add(resultPanel, BorderLayout.SOUTH);
+        panel.add(correctLabel, BorderLayout.SOUTH);
 
         return panel;
     }
