@@ -10,7 +10,7 @@ public class AudioPlayer {
 
     public static JPanel addAudioBox(String filePath) {
         JPanel audioBox = new JPanel();
-        JButton playButton = new JButton("Play song:");
+        JButton playButton = new JButton("Play song");
 
         playButton.addActionListener(e -> {
             // if audio is currently playing, stop playing
@@ -20,7 +20,7 @@ public class AudioPlayer {
 
             // runs audio on a separate thread
             new Thread(() -> {
-                try (FileInputStream fis = new FileInputStream(filePath);
+                try (FileInputStream fis = new FileInputStream("docs/audio_files/" + filePath);
                     BufferedInputStream bis = new BufferedInputStream(fis)) {
                     player = new Player(bis);
                     player.play();

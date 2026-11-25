@@ -71,24 +71,41 @@ public class QuizApp {
 
         String answer = questions[index][1];
 
-        // adds audio box
-        panel.add(AudioPlayer.addAudioBox(questions[index][0]));
-
         // adds text drop box
         JComboBox<String> answerBox = SearchableComboBox.addAnswerBox();
-        panel.add(answerBox);
+
+        // adds correct/incorrect label
+        JLabel correctLabel = new JLabel("");
 
         // adds submit button
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
-            if (answerBox.getEditor().getEditorComponent().equals(questions[index][1])) {
+            if (answerBox.getEditor().getEditorComponent().equals(answer)) {
                 score++;
                 correct[index] = 1;
+                correctLabel.setText("Correct!");
+            } else {
+                correctLabel.setText("Incorrect. Answer is " + answer);
             }
             goToNext(index);
         });
 
-        panel.add(submitButton);
+        // adds questions
+        panel.add(AudioPlayer.addAudioBox(questions[index][0]), BorderLayout.NORTH);
+
+        // creates panel for text box and submit button
+        JPanel responsePanel = new JPanel();
+
+        responsePanel.add(answerBox);
+        responsePanel.add(submitButton);
+
+        // creates bottom panel for label
+        JPanel resultPanel = new JPanel();
+        resultPanel.add(correctLabel);
+
+        panel.add(responsePanel, BorderLayout.CENTER);
+
+        panel.add(resultPanel, BorderLayout.SOUTH);
 
         return panel;
     }
