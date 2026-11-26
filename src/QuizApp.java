@@ -14,10 +14,10 @@ public class QuizApp {
     // Card Layout manages different parges in the game
     private final CardLayout cards = new CardLayout();
 
-    private final JPanel main = new JPanel(cards);
-    private final JLabel resultLabel = new JLabel("- / 5");
-
     private int score = 0;
+
+    private final JPanel main = new JPanel(cards);
+    private final JLabel resultLabel = new JLabel("Score: " + score + " / " + n);
 
     public QuizApp() {
         JFrame frame = new JFrame("Bird Song Quiz");
@@ -37,6 +37,14 @@ public class QuizApp {
         // adds start panel to main panel of cards
         main.add(startPanel, "start");
 
+        play();
+
+        frame.add(main);
+        frame.setVisible(true);
+    }
+
+    private void play() {
+
         // generates 5 questions
         questions = generateQuestions();
 
@@ -46,13 +54,13 @@ public class QuizApp {
         }
 
         // creates result page
-        JPanel resultPanel = new JPanel(new BorderLayout());
-        JLabel resultLabel = new JLabel("Results " + score + " / " + n);
+        JPanel resultPanel = new JPanel(new BorderLayout(10, 10));
         resultPanel.add(resultLabel, BorderLayout.CENTER);
 
         JButton playAgain = new JButton("Play Again");
         playAgain.addActionListener(e -> {
-           cards.show(main, "start");
+            cards.show(main, "start");
+            play();
         });
 
         resultPanel.add(resultLabel, BorderLayout.CENTER);
@@ -60,11 +68,7 @@ public class QuizApp {
 
         // adds result panel to card set
         main.add(resultPanel, "result");
-
-        frame.add(main);
-        frame.setVisible(true);
     }
-
     private JPanel buildQuestionPage(int index) {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
