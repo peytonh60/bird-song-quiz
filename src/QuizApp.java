@@ -17,12 +17,12 @@ public class QuizApp {
     private int score = 0;
 
     private final JPanel main = new JPanel(cards);
-    private final JLabel resultLabel = new JLabel("Score: " + score + " / " + n);
+    private final JLabel resultLabel = new JLabel("Score: " + score + " / " + n, SwingConstants.CENTER);
 
     public QuizApp() {
         JFrame frame = new JFrame("Bird Song Quiz");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
+        frame.setSize(800, 400);
         frame.setLocationRelativeTo(null);
 
         // builds start page
@@ -69,9 +69,13 @@ public class QuizApp {
         // adds result panel to card set
         main.add(resultPanel, "result");
     }
+
     private JPanel buildQuestionPage(int index) {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JPanel questionPanel = new JPanel(new BorderLayout(10, 10));
+        questionPanel.add(new JLabel("Question " + (index + 1) + " / " + n, SwingUtilities.CENTER), BorderLayout.NORTH);
 
         String answer = questions[index][1];
 
@@ -106,7 +110,8 @@ public class QuizApp {
         });
 
         // adds questions
-        panel.add(AudioPlayer.addAudioBox(questions[index][0]), BorderLayout.NORTH);
+        questionPanel.add(AudioPlayer.addAudioBox(questions[index][0]), BorderLayout.SOUTH);
+        panel.add(questionPanel, BorderLayout.NORTH);
 
         // creates panel for text box and submit button
         JPanel responsePanel = new JPanel();
