@@ -59,7 +59,7 @@ A window opens with the frame title "Bird Song Quiz"
 
 ## Demo
 
-![Video Walkthrough](...)
+![Video Walkthrough](https://youtu.be/u-m7sLRSC9U)
 
 ## Author
 
